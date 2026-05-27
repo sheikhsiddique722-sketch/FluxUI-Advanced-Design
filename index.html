@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FluxUI — Advanced Design System Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigate('home')">
+      <div class="logo-mark">F</div>
+      <div class="logo-name">Flux<span>UI</span></div>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link active" data-page="home" onclick="navigate('home')">Home</button>
+      <button class="nav-link" data-page="components" onclick="navigate('components')">Components</button>
+      <button class="nav-link" data-page="tokens" onclick="navigate('tokens')">Tokens</button>
+      <button class="nav-link" data-page="docs" onclick="navigate('docs')">Docs</button>
+      <button class="nav-link" data-page="playground" onclick="navigate('playground')">Playground</button>
+    </div>
+    <div class="nav-right">
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>All systems operational</span>
+      </div>
+      <button class="cmd-btn" onclick="openCmd()">
+        <span>⌘ Quick Search</span>
+        <span class="kbd">K</span>
+      </button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <button class="btn-primary" onclick="navigate('components')">Get Started</button>
+      <button class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- COMMAND PALETTE -->
+<div class="cmd-overlay" id="cmdOverlay" onclick="cmdOverlayClick(event)">
+  <div class="cmd-panel">
+    <div class="cmd-search">
+      <span class="cmd-search-icon">⌕</span>
+      <input class="cmd-input" id="cmdInput" placeholder="Search components, docs, tokens…" oninput="filterCmd(this.value)" onkeydown="cmdKeydown(event)" autocomplete="off">
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-footer">
+      <div class="cmd-foot-item"><kbd class="kbd">↑↓</kbd> Navigate</div>
+      <div class="cmd-foot-item"><kbd class="kbd">↵</kbd> Select</div>
+      <div class="cmd-foot-item"><kbd class="kbd">esc</kbd> Close</div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="export-modal-overlay" id="exportModal" onclick="closeExportModal(event)">
+  <div class="export-modal">
+    <h3>Export Code</h3>
+    <p>Copy the generated code for your canvas components.</p>
+    <div class="export-tabs">
+      <button class="export-tab active" onclick="switchExportTab('react',this)">React</button>
+      <button class="export-tab" onclick="switchExportTab('html',this)">HTML</button>
+    </div>
+    <div class="export-code" id="exportCode"></div>
+    <div class="export-actions">
+      <button class="btn-primary" onclick="copyExportCode()">Copy Code</button>
+      <button class="btn-close-modal" onclick="document.getElementById('exportModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page active" id="page-home">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">✦ Design System Infrastructure · v2.4.0</div>
+      <h1 class="hero-title">Build, Scale &<br><span class="grad-text">Manage Design</span><br>Systems Effortlessly</h1>
+      <p class="hero-sub">FluxUI is the complete design system platform — from tokens and components to documentation and deployment. One system, every team.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary btn-lg" onclick="navigate('components')">
+          Explore Components →
+        </button>
+        <button class="btn-secondary btn-lg" onclick="navigate('docs')">
+          <span>View Docs</span>
+          <span style="opacity:0.5">·</span>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--text3)">v2.4.0</span>
+        </button>
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <div class="hero-preview">
+        <div class="hero-preview-wrap">
+          <div class="preview-topbar">
+            <div class="preview-dots">
+              <div class="preview-dot"></div>
+              <div class="preview-dot"></div>
+              <div class="preview-dot"></div>
+            </div>
+            <div class="preview-url">fluxui.design/dashboard</div>
+          </div>
+          <div class="preview-body">
+            <div class="preview-sidebar">
+              <div class="preview-sb-title">Design Tokens</div>
+              <div class="preview-sb-item active"><div class="preview-sb-dot"></div>Colors</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Typography</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Spacing</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Shadows</div>
+              <div style="height:16px"></div>
+              <div class="preview-sb-title">Components</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Buttons</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Forms</div>
+              <div class="preview-sb-item"><div class="preview-sb-dot"></div>Navigation</div>
+            </div>
+            <div class="preview-main">
+              <div class="preview-row">
+                <div class="preview-token"><div class="preview-swatch" style="background:#3b82f6"></div>Blue 500</div>
+                <div class="preview-token"><div class="preview-swatch" style="background:#7c3aed"></div>Purple 600</div>
+                <div class="preview-token"><div class="preview-swatch" style="background:#00d4ff"></div>Cyan 400</div>
+                <div class="preview-token"><div class="preview-swatch" style="background:#10b981"></div>Emerald 500</div>
+              </div>
+              <div class="preview-components">
+                <div class="preview-comp">
+                  <div class="preview-comp-label">Button</div>
+                  <span class="preview-btn-demo">Primary</span>
+                </div>
+                <div class="preview-comp">
+                  <div class="preview-comp-label">Input</div>
+                  <input class="preview-input-demo" value="Hello, FluxUI" readonly>
+                </div>
+                <div class="preview-comp">
+                  <div class="preview-comp-label">Status Badges</div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap">
+                    <span class="preview-badge green">Active</span>
+                    <span class="preview-badge blue">Stable</span>
+                    <span class="preview-badge amber">Beta</span>
+                  </div>
+                </div>
+                <div class="preview-comp">
+                  <div class="preview-comp-label">Version</div>
+                  <div style="font-size:14px;font-weight:700;color:#60a5fa;font-family:var(--mono)">v2.4.0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="tag" style="margin-bottom:16px">✦ Platform Features</div>
+        <h2 style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-0.5px;margin-bottom:12px">Everything in one system</h2>
+        <p style="color:var(--text2);font-size:15px;max-width:480px;margin:0 auto">From raw tokens to deployed components, FluxUI handles the entire design system lifecycle.</p>
+      </div>
+      <div class="features-grid reveal">
+        <div class="feature-cell">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-title">Design Tokens Engine</div>
+          <div class="feature-desc">Define, manage, and transform design tokens across platforms. CSS variables, JS exports, and JSON schemas — all synced.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Component Library</div>
+          <div class="feature-desc">100+ production-ready components with full accessibility, dark mode, and responsive support out of the box.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon">🌈</div>
+          <div class="feature-title">Theme Generator</div>
+          <div class="feature-desc">Spin up branded themes in seconds. Real-time preview, contrast checking, and WCAG compliance built in.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">Version Control for UI</div>
+          <div class="feature-desc">Full changelog, diff views, and rollback for every token, component, and theme change. Git-style version control for design.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon">🔌</div>
+          <div class="feature-title">Figma Sync Integration</div>
+          <div class="feature-desc">Bidirectional sync with Figma Variables. Push tokens from code to Figma or pull designs directly into your system.</div>
+        </div>
+        <div class="feature-cell">
+          <div class="feature-icon">🛠</div>
+          <div class="feature-title">Developer API Access</div>
+          <div class="feature-desc">REST + GraphQL APIs for all your design data. CI/CD hooks, webhooks, and SDK packages for React, Vue, and Svelte.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOW -->
+  <section class="section-sm" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:48px" class="reveal">
+        <div class="tag" style="margin-bottom:16px">⟳ Workflow</div>
+        <h2 style="font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-0.5px">From idea to production</h2>
+      </div>
+      <div class="workflow-steps glass reveal" style="border-radius:var(--radius-lg)">
+        <div class="workflow-step">
+          <div class="step-num">1</div>
+          <div class="step-name">Design</div>
+          <div class="step-desc">Create in Figma, define your visual language and brand identity</div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">2</div>
+          <div class="step-name">Tokenize</div>
+          <div class="step-desc">Extract and structure design decisions into scalable tokens</div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">3</div>
+          <div class="step-name">Build</div>
+          <div class="step-desc">Compose components using your token system and library</div>
+        </div>
+        <div class="workflow-step">
+          <div class="step-num">4</div>
+          <div class="step-name">Deploy</div>
+          <div class="step-desc">Ship via npm, CDN, or API — synced across all platforms</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:56px" class="reveal">
+        <div class="tag" style="margin-bottom:16px">💬 Testimonials</div>
+        <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-0.5px">Trusted by design teams</h2>
+      </div>
+      <div class="testimonials-grid reveal">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"FluxUI completely transformed how our 40-person product team manages tokens. The Figma sync is flawless — no more design/dev drift."</div>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#3b82f6,#7c3aed)">MK</div>
+            <div>
+              <div class="author-name">Morgan Kim</div>
+              <div class="author-role">Head of Design · Stripe</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"The developer API is the real killer feature. We automated our entire token pipeline — it just works. Saved our frontend team 10+ hours a week."</div>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#00d4ff,#3b82f6)">AL</div>
+            <div>
+              <div class="author-name">Alex Laurent</div>
+              <div class="author-role">Staff Engineer · Vercel</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <div class="testimonial-text">"We migrated from a Notion doc system to FluxUI in a weekend. The documentation builder and version control for components is genuinely brilliant."</div>
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#10b981,#00d4ff)">SR</div>
+            <div>
+              <div class="author-name">Sofia Reyes</div>
+              <div class="author-role">Design Lead · Linear</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo-name">Flux<span class="grad-text">UI</span></span>
+          <div class="footer-desc">The complete design system infrastructure for modern product teams. Build faster. Scale smarter.</div>
+        </div>
+        <div>
+          <div class="footer-col-title">Platform</div>
+          <a class="footer-link" onclick="navigate('components')">Components</a>
+          <a class="footer-link" onclick="navigate('tokens')">Design Tokens</a>
+          <a class="footer-link" onclick="navigate('playground')">Playground</a>
+          <a class="footer-link">Figma Plugin</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Docs</div>
+          <a class="footer-link" onclick="navigate('docs')">Getting Started</a>
+          <a class="footer-link" onclick="navigate('docs')">API Reference</a>
+          <a class="footer-link" onclick="navigate('docs')">Theming Guide</a>
+          <a class="footer-link" onclick="navigate('docs')">Changelog</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <a class="footer-link">About</a>
+          <a class="footer-link">Blog</a>
+          <a class="footer-link">Careers</a>
+          <a class="footer-link">GitHub</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2024 FluxUI Inc. All rights reserved.</div>
+        <div style="display:flex;gap:16px">
+          <span class="footer-copy" style="cursor:pointer">Privacy</span>
+          <span class="footer-copy" style="cursor:pointer">Terms</span>
+          <div class="status-pill" style="font-size:10px"><span class="status-dot"></span>v2.4.0 Stable</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ==================== COMPONENTS PAGE ==================== -->
+<div class="page" id="page-components">
+  <div class="comp-layout">
+    <aside class="comp-sidebar">
+      <div class="comp-search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="comp-search" id="compSearch" placeholder="Search components…" oninput="filterComponents(this.value)">
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Category</div>
+        <button class="filter-btn active" onclick="filterByCategory('All',this)">⊞ All Components<span class="filter-count" id="countAll">28</span></button>
+        <button class="filter-btn" onclick="filterByCategory('Input',this)">⌨ Input<span class="filter-count">8</span></button>
+        <button class="filter-btn" onclick="filterByCategory('Feedback',this)">◎ Feedback<span class="filter-count">6</span></button>
+        <button class="filter-btn" onclick="filterByCategory('Navigation',this)">⊟ Navigation<span class="filter-count">5</span></button>
+        <button class="filter-btn" onclick="filterByCategory('Layout',this)">⊞ Layout<span class="filter-count">5</span></button>
+        <button class="filter-btn" onclick="filterByCategory('Display',this)">◈ Display<span class="filter-count">4</span></button>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-title">Status</div>
+        <button class="filter-btn">● Stable</button>
+        <button class="filter-btn">◑ Beta</button>
+        <button class="filter-btn">○ Experimental</button>
+      </div>
+    </aside>
+    <main class="comp-main">
+      <div style="margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <h1 style="font-size:26px;font-weight:800;letter-spacing:-0.3px;margin-bottom:4px">Component Library</h1>
+          <p style="font-size:13px;color:var(--text2)" id="compCount">28 components · All categories</p>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div class="tag">React</div>
+          <div class="tag">Vue</div>
+          <div class="tag">Svelte</div>
+        </div>
+      </div>
+      <div class="comp-grid" id="compGrid"></div>
+    </main>
+  </div>
+</div>
+
+<!-- ==================== TOKENS PAGE ==================== -->
+<div class="page" id="page-tokens">
+  <div class="tokens-layout">
+    <aside class="tokens-nav">
+      <div style="padding:0 8px;margin-bottom:20px">
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px">Design Tokens</div>
+        <div style="font-size:12px;color:var(--text3)">v2.4.0 · 148 tokens</div>
+      </div>
+      <button class="filter-btn active" onclick="scrollToTokenSection('colors')">🎨 Colors</button>
+      <button class="filter-btn" onclick="scrollToTokenSection('typography')">Aa Typography</button>
+      <button class="filter-btn" onclick="scrollToTokenSection('spacing')">↔ Spacing</button>
+      <button class="filter-btn" onclick="scrollToTokenSection('radius')">⬡ Border Radius</button>
+      <div style="height:1px;background:var(--border);margin:16px 0"></div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:10px">Live Preview</div>
+      <div class="live-preview-panel" style="position:static;margin-top:0">
+        <div class="lp-title"><div class="lp-dot"></div>Preview Card</div>
+        <div class="lp-card" id="liveCard">
+          <div id="liveCardTitle" style="font-size:16px;font-weight:600;margin-bottom:6px">Card Title</div>
+          <div style="font-size:13px;color:var(--text2);margin-bottom:16px">This preview updates with your token changes in real time.</div>
+          <button class="demo-btn primary" id="liveBtn">Action</button>
+        </div>
+        <div class="slider-group" style="margin-top:16px">
+          <div class="slider-label"><span>Border Radius</span><span id="radiusVal">12px</span></div>
+          <input class="slider" type="range" min="0" max="32" value="12" oninput="updateRadius(this.value)">
+        </div>
+        <div class="slider-group">
+          <div class="slider-label"><span>Padding</span><span id="paddingVal">20px</span></div>
+          <input class="slider" type="range" min="8" max="48" value="20" oninput="updatePadding(this.value)">
+        </div>
+      </div>
+    </aside>
+    <main class="tokens-main" id="tokensMain">
+      <!-- Colors -->
+      <div class="token-section" id="token-colors">
+        <h2 class="token-section-title">Color Tokens</h2>
+        <div class="token-section-sub">Core palette defining brand, semantic, and neutral colors</div>
+        <div style="margin-bottom:20px"><div class="tag">Primary</div></div>
+        <div class="token-grid" id="tokenColorGrid"></div>
+        <div style="margin:28px 0 16px"><div class="tag">Semantic</div></div>
+        <div class="token-grid" id="tokenSemanticGrid"></div>
+      </div>
+      <!-- Typography -->
+      <div class="token-section" id="token-typography">
+        <h2 class="token-section-title">Typography Scale</h2>
+        <div class="token-section-sub">Font sizes, weights, and line heights</div>
+        <div class="type-scale" id="typeScale"></div>
+      </div>
+      <!-- Spacing -->
+      <div class="token-section" id="token-spacing">
+        <h2 class="token-section-title">Spacing System</h2>
+        <div class="token-section-sub">Consistent spacing scale from 0 to 96</div>
+        <div class="spacing-visual" id="spacingVisual"></div>
+      </div>
+      <!-- Border Radius -->
+      <div class="token-section" id="token-radius">
+        <h2 class="token-section-title">Border Radius</h2>
+        <div class="token-section-sub">Shape tokens for components and containers</div>
+        <div class="radius-demos" id="radiusDemos"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ==================== DOCS PAGE ==================== -->
+<div class="page" id="page-docs">
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div style="padding:0 8px;margin-bottom:8px;font-size:14px;font-weight:600">Documentation</div>
+      <div class="docs-section-label">Getting Started</div>
+      <button class="docs-link active" onclick="showDoc('installation')"><span class="dot"></span>Installation</button>
+      <button class="docs-link" onclick="showDoc('quickstart')"><span class="dot"></span>Quick Start</button>
+      <button class="docs-link" onclick="showDoc('configuration')"><span class="dot"></span>Configuration</button>
+      <div class="docs-section-label">Core Concepts</div>
+      <button class="docs-link" onclick="showDoc('tokens')"><span class="dot"></span>Design Tokens</button>
+      <button class="docs-link" onclick="showDoc('theming')"><span class="dot"></span>Theming</button>
+      <button class="docs-link" onclick="showDoc('components')"><span class="dot"></span>Components</button>
+      <div class="docs-section-label">API Reference</div>
+      <button class="docs-link" onclick="showDoc('api-tokens')"><span class="dot"></span>Token API</button>
+      <button class="docs-link" onclick="showDoc('api-components')"><span class="dot"></span>Component API</button>
+      <button class="docs-link" onclick="showDoc('api-webhooks')"><span class="dot"></span>Webhooks</button>
+      <div class="docs-section-label">Integrations</div>
+      <button class="docs-link" onclick="showDoc('figma')"><span class="dot"></span>Figma Plugin</button>
+      <button class="docs-link" onclick="showDoc('github')"><span class="dot"></span>GitHub Actions</button>
+    </aside>
+    <main class="docs-main" id="docsMain"></main>
+    <aside class="docs-toc" id="docsToc">
+      <div class="toc-title">On this page</div>
+    </aside>
+  </div>
+</div>
+
+<!-- ==================== PLAYGROUND PAGE ==================== -->
+<div class="page" id="page-playground">
+  <div class="playground-layout">
+    <aside class="playground-palette">
+      <div class="palette-title">Components</div>
+      <div class="palette-comp" draggable="true" data-comp="button" ondragstart="dragStart(event,'button')">
+        <span class="palette-comp-icon">⬛</span>Button<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="input" ondragstart="dragStart(event,'input')">
+        <span class="palette-comp-icon">▭</span>Input<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="badge" ondragstart="dragStart(event,'badge')">
+        <span class="palette-comp-icon">◉</span>Badge<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="card" ondragstart="dragStart(event,'card')">
+        <span class="palette-comp-icon">⬜</span>Card<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="toggle" ondragstart="dragStart(event,'toggle')">
+        <span class="palette-comp-icon">⊙</span>Toggle<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="avatar" ondragstart="dragStart(event,'avatar')">
+        <span class="palette-comp-icon">◯</span>Avatar<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="progress" ondragstart="dragStart(event,'progress')">
+        <span class="palette-comp-icon">▬</span>Progress<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="alert" ondragstart="dragStart(event,'alert')">
+        <span class="palette-comp-icon">⚠</span>Alert<span class="drag-hint">⠿</span>
+      </div>
+      <div style="height:1px;background:var(--border);margin:16px 0"></div>
+      <div class="palette-title">Layouts</div>
+      <div class="palette-comp" draggable="true" data-comp="divider" ondragstart="dragStart(event,'divider')">
+        <span class="palette-comp-icon">─</span>Divider<span class="drag-hint">⠿</span>
+      </div>
+      <div class="palette-comp" draggable="true" data-comp="spacer" ondragstart="dragStart(event,'spacer')">
+        <span class="palette-comp-icon">↕</span>Spacer<span class="drag-hint">⠿</span>
+      </div>
+    </aside>
+
+    <div style="display:flex;flex-direction:column;overflow:hidden">
+      <div class="canvas-toolbar">
+        <button class="canvas-tool active" onclick="setCanvasTool('select',this)">↖ Select</button>
+        <button class="canvas-tool" onclick="clearCanvas()">⊘ Clear</button>
+        <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+        <span style="font-size:12px;color:var(--text3)" id="canvasInfo">Drop components here</span>
+        <button class="canvas-tool export-tool" onclick="openExportModal()">↗ Export Code</button>
+      </div>
+      <div class="playground-canvas" id="playgroundCanvas"
+        ondragover="event.preventDefault()"
+        ondrop="dropComponent(event)">
+        <div class="canvas-area" id="canvasArea">
+          <div class="canvas-placeholder" id="canvasPlaceholder">
+            <div class="canvas-placeholder-icon">⊞</div>
+            <div style="font-size:16px;font-weight:600">Drag components here</div>
+            <div style="font-size:13px;color:var(--text3);max-width:260px;line-height:1.6">Drag from the palette on the left to build your UI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="props-panel">
+      <div class="props-title">Properties</div>
+      <div id="propsContent">
+        <p style="font-size:13px;color:var(--text3)">Select a component on the canvas to edit its properties.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
